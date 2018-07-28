@@ -33,7 +33,7 @@ impl Config {
 fn main() {
     root_check();
 
-    env_logger::init().unwrap();
+    env_logger::init();
 
     let config = parse_args();
     debug!("Config: {:?}", config);
