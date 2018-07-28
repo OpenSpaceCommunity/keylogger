@@ -26,7 +26,10 @@ struct Config {
 
 impl Config {
     fn new(device_file: String, log_file: String) -> Self {
-        Config { device_file: device_file, log_file: log_file }
+        Config {
+            device_file,
+            log_file
+        }
     }
 }
 
@@ -38,9 +41,14 @@ fn main() {
     let config = parse_args();
     debug!("Config: {:?}", config);
 
-    let mut log_file = OpenOptions::new().create(true).write(true).append(true).open(config.log_file)
-        .unwrap_or_else(|e| panic!("{}", e));
-    let mut device_file = File::open(&config.device_file).unwrap_or_else(|e| panic!("{}", e));
+    let mut log_file = OpenOptions::new()
+        .create(true)
+        .write(true)
+        .append(true)
+        .open(config.log_file)
+        .expect("Can't open log file");
+    let mut device_file = File::open(&config.device_file)
+        .expect("Can't open device file");
 
     // TODO: use the sizeof function (not available yet) instead of hard-coding 24.
     let mut buf: [u8; 24] = unsafe { mem::zeroed() };
@@ -49,27 +57,36 @@ fn main() {
     // and then one is released
     let mut shift_pressed = 0;
     loop {
-        let num_bytes = device_file.read(&mut buf).unwrap_or_else(|e| panic!("{}", e));
+        let num_bytes = device_file.read(&mut buf)
+            .expect("Can't read from device file");
         if num_bytes != mem::size_of::<InputEvent>() {
             panic!("Error while reading from device file");
         }
         let event: InputEvent = unsafe { mem::transmute(buf) };
         if is_key_event(event.type_) {
-            if is_key_press(event.value) {
+            let event_mark = if is_key_press(event.value) {
                 if is_shift(event.code) {
                     shift_pressed += 1;
                 }
-
-                let text = get_key_text(event.code, shift_pressed).as_bytes();
-                let num_bytes = log_file.write(text).unwrap_or_else(|e| panic!("{}", e));
-
-                if num_bytes != text.len() {
-                    panic!("Error while writing to log file");
-                }
+                "PR"
             } else if is_key_release(event.value) {
                 if is_shift(event.code) {
                     shift_pressed -= 1;
                 }
+                "RE"
+            } else {
+                continue;
+            };
+
+            let text = format!(
+                "{}.{} {} {}\n",
+                event.tv_sec, event.tv_usec, event_mark, get_key_text(event.code, shift_pressed)
+            );
+            let num_bytes = log_file.write(text.as_bytes())
+                .expect("Can't write to log file");
+
+            if num_bytes != text.len() {
+                panic!("Error while writing to log file");
             }
         }
     }
@@ -96,7 +113,8 @@ fn parse_args() -> Config {
     opts.optopt("d", "device", "specify the device file", "DEVICE");
     opts.optopt("f", "file", "specify the file to log to", "FILE");
 
-    let matches = opts.parse(&args[1..]).unwrap_or_else(|e| panic!("{}", e));
+    let matches = opts.parse(&args[1..])
+        .expect("Can't parse options");
     if matches.opt_present("h") {
         print_usage(&args[0], opts);
         exit(0);
@@ -108,7 +126,7 @@ fn parse_args() -> Config {
     }
 
     let device_file = matches.opt_str("d").unwrap_or_else(|| get_default_device());
-    let log_file = matches.opt_str("f").unwrap_or("keys.log".to_owned());
+    let log_file = matches.opt_str("f").unwrap_or("keys.log".to_string());
 
     Config::new(device_file, log_file)
 }
@@ -133,9 +151,11 @@ fn get_keyboard_device_filenames() -> Vec<String> {
     command_str.push_str("| grep -B1 120013");
     command_str.push_str("| grep -Eo event[0-9]+");
 
-    let res = Command::new("sh").arg("-c").arg(command_str).output().unwrap_or_else(|e| {
-        panic!("{}", e);
-    });
+    let res = Command::new("sh")
+        .arg("-c")
+        .arg(command_str)
+        .output()
+        .expect("Can't get keyboard device filenames");
     let res_str = std::str::from_utf8(&res.stdout).unwrap();
 
     let mut filenames = Vec::new();
