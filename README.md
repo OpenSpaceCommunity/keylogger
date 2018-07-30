@@ -9,8 +9,8 @@ Only the US keyboard layout is supported. See [input.rs](https://github.com/gsin
 To install Rust, run the following in your terminal, then follow the onscreen instructions.
 
 ```
-curl https://sh.rustup.rs -sSf | sh
-source $HOME/.cargo/env
+$ curl https://sh.rustup.rs -sSf | sh
+$ source $HOME/.cargo/env
 ```
 
 Clone the repository:
