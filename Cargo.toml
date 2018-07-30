@@ -1,10 +1,14 @@
 [package]
 name = "keylogger"
-version = "0.0.1"
-authors = ["Gulshan Singh <gsingh2011@gmail.com>"]
+version = "0.1.0"
+authors = [
+    "Gulshan Singh <gsingh2011@gmail.com>",
+    "Alexander Mescheryakov <freecoder.xx@gmail.com>"
+]
 
 [dependencies]
 getopts = "0.2"
 libc = "0.2"
 env_logger = "0.5"
 log = "0.4"
+chrono = "0.4"
