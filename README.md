@@ -24,17 +24,16 @@ Build the code:
 
 ```$ cargo build --release```
 
-You can run the code with Cargo or directly from the target directory. Note that the keylogger must be run as the root user:
+You can run the code directly from the target directory. Note that the keylogger must be run as the root user:
 
 ```
 $ sudo ./target/release/keylogger
-$ sudo cargo run --release
 ```
 
 ## Usage
 
 ```
-$ sudo cargo run -- -h
+$ sudo ./target/release/keylogger -h
 
 Usage: target/release/keylogger [options]
 
