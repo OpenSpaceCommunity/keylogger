@@ -1,4 +1,5 @@
 // Constants, structs, and arrays derived from /linux/include/linux/input.h
+use log::debug;
 
 const MAX_KEYS: u16 = 112;
 
