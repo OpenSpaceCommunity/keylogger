@@ -1,5 +1,6 @@
 // Constants, structs, and arrays derived from /linux/include/linux/input.h
 use log::debug;
+use crate::system::Key;
 
 const MAX_KEYS: u16 = 112;
 
@@ -21,63 +22,60 @@ pub struct InputEvent {
     pub value: i32
 }
 
-// Unknown key string
-const UK: &'static str = "<UK>";
-
 const KEY_NAMES: [&'static str; MAX_KEYS as usize] = [
-    UK, "<ESC>",
+    Key::UK, Key::ESC,
     "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "=",
-    "<Backspace>", "<Tab>",
+    Key::BACKSPACE, Key::TAB,
     "q", "w", "e", "r", "t", "y", "u", "i", "o", "p",
-    "[", "]", "<Enter>", "<LCtrl>",
+    "[", "]", Key::ENTER, Key::LCTRL,
     "a", "s", "d", "f", "g", "h", "j", "k", "l", ";",
-    "'", "`", "<LShift>",
+    "'", "`", Key::LSHIFT,
     "\\", "z", "x", "c", "v", "b", "n", "m", ",", ".", "/",
-    "<RShift>",
-    "<KP*>",
-    "<LAlt>", " ", "<CapsLock>",
-    "<F1>", "<F2>", "<F3>", "<F4>", "<F5>", "<F6>", "<F7>", "<F8>", "<F9>", "<F10>",
-    "<NumLock>", "<ScrollLock>",
-    "<KP7>", "<KP8>", "<KP9>",
-    "<KP->",
-    "<KP4>", "<KP5>", "<KP6>",
-    "<KP+>",
-    "<KP1>", "<KP2>", "<KP3>", "<KP0>",
-    "<KP.>",
-    UK, UK, UK,
-    "<F11>", "<F12>",
-    UK, UK, UK, UK, UK, UK, UK,
-    "<KPEnter>", "<RCtrl>", "<KP/>", "<SysRq>", "<RAlt>", UK,
-    "<Home>", "<Up>", "<PageUp>", "<Left>", "<Right>", "<End>", "<Down>",
-    "<PageDown>", "<Insert>", "<Delete>"
+    Key::RSHIFT,
+    Key::KP_STAR,
+    Key::LALT, Key::SPACE, Key::CAPS_LOCK,
+    Key::F1, Key::F2, Key::F3, Key::F4, Key::F5, Key::F6, Key::F7, Key::F8, Key::F9, Key::F10,
+    Key::NUM_LOCK, Key::SCROL_LOCK,
+    Key::KP7, Key::KP8, Key::KP9,
+    Key::KP_SUB,
+    Key::KP4, Key::KP5, Key::KP6,
+    Key::KP_ADD,
+    Key::KP1, Key::KP2, Key::KP3, Key::KP0,
+    Key::KP_POINT,
+    Key::UK, Key::UK, Key::UK,
+    Key::F11, Key::F12,
+    Key::UK, Key::UK, Key::UK, Key::UK, Key::UK, Key::UK, Key::UK,
+    Key::KP_ENTER, Key::RCTRL, Key::KP_DIV, Key::SYS_RQ, Key::RALT, Key::UK,
+    Key::HOME, Key::UP, Key::PAGE_UP, Key::LEFT, Key::RIGHT, Key::END, Key::DOWN,
+    Key::PAGE_DOWN, Key::INSERT, Key::DELETE
 ];
 
 const SHIFT_KEY_NAMES: [&'static str; MAX_KEYS as usize] = [
-    UK, "<ESC>",
+    Key::UK, Key::ESC,
     "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "_", "+",
-    "<Backspace>", "<Tab>",
+    Key::BACKSPACE, Key::TAB,
     "Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P",
-    "{", "}", "<Enter>", "<LCtrl>",
+    "{", "}", Key::ENTER, Key::LCTRL,
     "A", "S", "D", "F", "G", "H", "J", "K", "L", ":",
-    "\"", "~", "<LShift>",
+    "\"", "~", Key::LSHIFT,
     "|", "Z", "X", "C", "V", "B", "N", "M", "<", ">", "?",
-    "<RShift>",
-    "<KP*>",
-    "<LAlt>", " ", "<CapsLock>",
-    "<F1>", "<F2>", "<F3>", "<F4>", "<F5>", "<F6>", "<F7>", "<F8>", "<F9>", "<F10>",
-    "<NumLock>", "<ScrollLock>",
-    "<KP7>", "<KP8>", "<KP9>",
-    "<KP->",
-    "<KP4>", "<KP5>", "<KP6>",
-    "<KP+>",
-    "<KP1>", "<KP2>", "<KP3>", "<KP0>",
-    "<KP.>",
-    UK, UK, UK,
-    "<F11>", "<F12>",
-    UK, UK, UK, UK, UK, UK, UK,
-    "<KPEnter>", "<RCtrl>", "<KP/>", "<SysRq>", "<RAlt>", UK,
-    "<Home>", "<Up>", "<PageUp>", "<Left>", "<Right>", "<End>", "<Down>",
-    "<PageDown>", "<Insert>", "<Delete>"
+    Key::RSHIFT,
+    Key::KP_STAR,
+    Key::LALT, Key::SPACE, Key::CAPS_LOCK,
+    Key::F1, Key::F2, Key::F3, Key::F4, Key::F5, Key::F6, Key::F7, Key::F8, Key::F9, Key::F10,
+    Key::NUM_LOCK, Key::SCROL_LOCK,
+    Key::KP7, Key::KP8, Key::KP9,
+    Key::KP_SUB,
+    Key::KP4, Key::KP5, Key::KP6,
+    Key::KP_ADD,
+    Key::KP1, Key::KP2, Key::KP3, Key::KP0,
+    Key::KP_POINT,
+    Key::UK, Key::UK, Key::UK,
+    Key::F11, Key::F12,
+    Key::UK, Key::UK, Key::UK, Key::UK, Key::UK, Key::UK, Key::UK,
+    Key::KP_ENTER, Key::RCTRL, Key::KP_DIV, Key::SYS_RQ, Key::RALT, Key::UK,
+    Key::HOME, Key::UP, Key::PAGE_UP, Key::LEFT, Key::RIGHT, Key::END, Key::DOWN,
+    Key::PAGE_DOWN, Key::INSERT, Key::DELETE
 ];
 
 // Converts a key code to it's ascii representation. Some unprintable keys like escape are printed
@@ -93,7 +91,7 @@ pub fn get_key_text(code: u16, shift_pressed: u8) -> &'static str {
         return arr[code as usize];
     } else {
         debug!("Unknown key: {}", code);
-        return UK;
+        return Key::UK;
     }
 }
 
