@@ -40,7 +40,7 @@ impl Vk {
     }
 
     fn is_pressed(&self) -> bool {
-        (unsafe { user32::GetAsyncKeyState(self.0 as i32) } == -32767)
+        (unsafe { user32::GetAsyncKeyState(self.0 as i32) } as u16 & 0x8000 != 0)
     }
 
     fn is_used(&self) -> bool {
