@@ -1,9 +1,9 @@
 use std::ops::Range;
 use std::collections::VecDeque;
 
-use chrono::{NaiveDateTime, DateTime, Local, Utc};
-use log::debug;
-use user32::{self, winuser};
+use chrono::{DateTime, Local};
+use winapi::{um::winuser};
+use user32;
 use kernel32;
 
 use crate::{Config, system::{PressEvent, Key}};
@@ -22,7 +22,7 @@ impl Vk {
         8..Self::MAX_KEY_CODE
     }
 
-    fn key(&self) -> &str {
+    fn key(&self) -> &'static str {
         match self.0 as i32 {
             winuser::VK_ESCAPE => Key::ESC,
             winuser::VK_BACK => Key::BACKSPACE,
@@ -40,7 +40,7 @@ impl Vk {
     }
 
     fn is_pressed(&self) -> bool {
-        unsafe { user32::GetAsyncKeyState(self.0 as i32) } == -32767
+        (unsafe { user32::GetAsyncKeyState(self.0 as i32) } == -32767)
     }
 }
 
@@ -50,7 +50,7 @@ pub struct InputDevice {
 }
 
 impl InputDevice {
-    pub fn new(config: &Config) -> Self {
+    pub fn new(_config: &Config) -> Self {
         Self {
             pressed_keys: [false; Vk::MAX_KEY_CODE],
             events: VecDeque::new(),
