@@ -86,3 +86,28 @@ impl Key {
     pub const KP_POINT: &'static str = "<KP.>";
     pub const KP_ENTER: &'static str = "<KPEnter>";
 }
+
+#[cfg(windows)]
+pub struct WinKey;
+
+#[cfg(windows)]
+impl WinKey {
+    pub const LWIN: &'static str = "<LWin>";
+    pub const RWIN: &'static str = "<RWin>";
+    pub const F13: &'static str = "<F13>";
+    pub const F14: &'static str = "<F14>";
+    pub const F15: &'static str = "<F15>";
+    pub const F16: &'static str = "<F16>";
+    pub const F17: &'static str = "<F17>";
+    pub const F18: &'static str = "<F18>";
+    pub const F19: &'static str = "<F19>";
+    pub const F20: &'static str = "<F20>";
+    pub const F21: &'static str = "<F21>";
+    pub const F22: &'static str = "<F22>";
+    pub const F23: &'static str = "<F23>";
+    pub const F24: &'static str = "<F24>";
+    pub const PRINT_SCREEN: &'static str = "<PrtScr>";
+    pub const PAUSE: &'static str = "<Pause>";
+    pub const CLEAR: &'static str = "<Clear>";
+    pub const SLEEP: &'static str = "<Sleep>";
+}
