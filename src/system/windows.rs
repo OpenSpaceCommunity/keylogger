@@ -42,6 +42,15 @@ impl Vk {
     fn is_pressed(&self) -> bool {
         (unsafe { user32::GetAsyncKeyState(self.0 as i32) } == -32767)
     }
+
+    fn is_used(&self) -> bool {
+        match self.0 as i32 {
+            0...7 => false,
+            // Because used VK_L../VK_R.. versions
+            winuser::VK_CONTROL | winuser::VK_SHIFT | winuser::VK_MENU => false,
+            _ => true,
+        }
+    }
 }
 
 pub struct InputDevice {
@@ -60,15 +69,17 @@ impl InputDevice {
     pub fn check_key_event(&mut self) -> Option<(PressEvent, &str, DateTime<Local>)> {
         for i in Vk::range() {
             let vk = Vk(i);
-            if vk.is_pressed() {
-                if !self.pressed_keys[i] {
-                    self.pressed_keys[i] = true;
-                    self.events.push_back((PressEvent::Press, vk, Local::now()));
-                }
-            } else {
-                if self.pressed_keys[i] {
-                    self.pressed_keys[i] = false;
-                    self.events.push_back((PressEvent::Release, vk, Local::now()));
+            if vk.is_used() {
+                if vk.is_pressed() {
+                    if !self.pressed_keys[i] {
+                        self.pressed_keys[i] = true;
+                        self.events.push_back((PressEvent::Press, vk, Local::now()));
+                    }
+                } else {
+                    if self.pressed_keys[i] {
+                        self.pressed_keys[i] = false;
+                        self.events.push_back((PressEvent::Release, vk, Local::now()));
+                    }
                 }
             }
         }
