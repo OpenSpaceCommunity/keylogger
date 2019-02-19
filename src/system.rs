@@ -30,7 +30,7 @@ pub struct Key;
 
 impl Key {
     // Unknown key string
-    pub const UK: &'static str = "<UK>";
+    pub const UNKNOWN: &'static str = "<UK>";
 
     pub const ESC: &'static str = "<ESC>";
     pub const BACKSPACE: &'static str = "<Backspace>";

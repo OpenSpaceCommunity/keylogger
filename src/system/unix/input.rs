@@ -23,7 +23,7 @@ pub struct InputEvent {
 }
 
 const KEY_NAMES: [&'static str; MAX_KEYS as usize] = [
-    Key::UK, Key::ESC,
+    Key::UNKNOWN, Key::ESC,
     "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "=",
     Key::BACKSPACE, Key::TAB,
     "q", "w", "e", "r", "t", "y", "u", "i", "o", "p",
@@ -42,16 +42,16 @@ const KEY_NAMES: [&'static str; MAX_KEYS as usize] = [
     Key::KP_ADD,
     Key::KP1, Key::KP2, Key::KP3, Key::KP0,
     Key::KP_POINT,
-    Key::UK, Key::UK, Key::UK,
+    Key::UNKNOWN, Key::UNKNOWN, Key::UNKNOWN,
     Key::F11, Key::F12,
-    Key::UK, Key::UK, Key::UK, Key::UK, Key::UK, Key::UK, Key::UK,
-    Key::KP_ENTER, Key::RCTRL, Key::KP_DIV, Key::SYS_RQ, Key::RALT, Key::UK,
+    Key::UNKNOWN, Key::UNKNOWN, Key::UNKNOWN, Key::UNKNOWN, Key::UNKNOWN, Key::UNKNOWN, Key::UNKNOWN,
+    Key::KP_ENTER, Key::RCTRL, Key::KP_DIV, Key::SYS_RQ, Key::RALT, Key::UNKNOWN,
     Key::HOME, Key::UP, Key::PAGE_UP, Key::LEFT, Key::RIGHT, Key::END, Key::DOWN,
     Key::PAGE_DOWN, Key::INSERT, Key::DELETE
 ];
 
 const SHIFT_KEY_NAMES: [&'static str; MAX_KEYS as usize] = [
-    Key::UK, Key::ESC,
+    Key::UNKNOWN, Key::ESC,
     "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "_", "+",
     Key::BACKSPACE, Key::TAB,
     "Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P",
@@ -70,10 +70,10 @@ const SHIFT_KEY_NAMES: [&'static str; MAX_KEYS as usize] = [
     Key::KP_ADD,
     Key::KP1, Key::KP2, Key::KP3, Key::KP0,
     Key::KP_POINT,
-    Key::UK, Key::UK, Key::UK,
+    Key::UNKNOWN, Key::UNKNOWN, Key::UNKNOWN,
     Key::F11, Key::F12,
-    Key::UK, Key::UK, Key::UK, Key::UK, Key::UK, Key::UK, Key::UK,
-    Key::KP_ENTER, Key::RCTRL, Key::KP_DIV, Key::SYS_RQ, Key::RALT, Key::UK,
+    Key::UNKNOWN, Key::UNKNOWN, Key::UNKNOWN, Key::UNKNOWN, Key::UNKNOWN, Key::UNKNOWN, Key::UNKNOWN,
+    Key::KP_ENTER, Key::RCTRL, Key::KP_DIV, Key::SYS_RQ, Key::RALT, Key::UNKNOWN,
     Key::HOME, Key::UP, Key::PAGE_UP, Key::LEFT, Key::RIGHT, Key::END, Key::DOWN,
     Key::PAGE_DOWN, Key::INSERT, Key::DELETE
 ];
@@ -91,7 +91,7 @@ pub fn get_key_text(code: u16, shift_pressed: u8) -> &'static str {
         return arr[code as usize];
     } else {
         debug!("Unknown key: {}", code);
-        return Key::UK;
+        return Key::UNKNOWN;
     }
 }
 

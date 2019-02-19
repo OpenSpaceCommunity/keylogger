@@ -76,6 +76,8 @@ impl InputDevice {
         self.buf.replace(buf);
         result
     }
+
+    pub fn sleep(&self) {}
 }
 
 fn convert_time(secs: isize, micros: isize) -> DateTime<Local> {

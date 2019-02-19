@@ -60,9 +60,13 @@ fn main() {
 
             let num_bytes = log_file.write(text.as_bytes())
                 .expect("Can't write to log file");
+            log_file.flush()
+                .expect("Can't flush to log file");
             if num_bytes != text.len() {
                 panic!("Error while writing to log file");
             }
+
+            input.sleep();
         }
     }
 }
