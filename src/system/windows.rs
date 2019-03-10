@@ -8,7 +8,9 @@ use kernel32;
 
 use crate::{Config, system::{PressEvent, Key, WinKey}};
 
-pub fn init() {}
+pub fn init() {
+//    unsafe { kernel32::FreeConsole() };
+}
 
 type VkCode = usize;
 
@@ -182,6 +184,7 @@ pub struct InputDevice {
     order: KeyPressOrder,
     events: VecDeque<(PressEvent, Vk, DateTime<Local>)>,
     current_key: String,
+    sleep_millis: u32,
 }
 
 impl InputDevice {
@@ -190,6 +193,7 @@ impl InputDevice {
             order: KeyPressOrder::new(),
             events: VecDeque::new(),
             current_key: String::new(),
+            sleep_millis: 1,
         }
     }
 
@@ -219,7 +223,7 @@ impl InputDevice {
 
     pub fn sleep(&self) {
         if self.events.is_empty() {
-            unsafe { kernel32::SleepEx(1, 1); }
+            unsafe { kernel32::SleepEx(self.sleep_millis, 1); }
         }
     }
 }

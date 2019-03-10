@@ -55,6 +55,8 @@ fn main() {
     system::init();
     env_logger::init();
 
+    println!("Start key logging");
+
     let config = parse_args();
     debug!("Config: {:?}", config);
 
