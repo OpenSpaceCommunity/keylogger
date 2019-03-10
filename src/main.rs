@@ -28,6 +28,29 @@ impl Config {
     }
 }
 
+struct LogFile {
+    file: File,
+    creation: DateTime<Local>,
+}
+
+impl LogFile {
+    fn new_from(datetime: DateTime<Local>, name: Option<String>) -> Self {
+        let name = name.unwrap_or_else(|| format!(
+            "{:04}-{:02}-{:02}-{}.log",
+            datetime.year(), datetime.month(), datetime.day(), datetime.num_seconds_from_midnight()
+        ));
+        Self {
+            file: OpenOptions::new()
+                .create(true)
+                .append(true)
+                .open(&name)
+                .expect("Can't open log file"),
+            creation: datetime,
+        }
+
+    }
+}
+
 fn main() {
     system::init();
     env_logger::init();
@@ -35,12 +58,7 @@ fn main() {
     let config = parse_args();
     debug!("Config: {:?}", config);
 
-    let log_name = log_name_from(&Local::now());
-    let mut log_file = if let Some(ref name) = config.log_file {
-        open_log_file(name)
-    } else {
-        open_log_file(&log_name)
-    };
+    let mut log = LogFile::new_from(Local::now(), config.log_file.clone());
 
     let mut input = InputDevice::new(&config);
     loop {
@@ -52,36 +70,23 @@ fn main() {
             );
 
             if config.log_file.is_none() {
-                let current_log_name = log_name_from(&datetime);
-                if log_name != current_log_name {
-                    log_file = open_log_file(current_log_name);
+                if datetime.date() != log.creation.date() {
+                    log = LogFile::new_from(datetime, None);
                 }
             }
 
-            let num_bytes = log_file.write(text.as_bytes())
-                .expect("Can't write to log file");
-            log_file.flush()
-                .expect("Can't flush to log file");
+            let num_bytes = log.file.write(text.as_bytes()).unwrap_or_else(|err| {
+                debug!("Can't write to log file");
+                0
+            });
+            log.file.flush().unwrap_or_else(|err| debug!("Can't flush to log file"));
             if num_bytes != text.len() {
-                panic!("Error while writing to log file");
+                debug!("Error while writing to log file");
             }
 
             input.sleep();
         }
     }
-}
-
-fn open_log_file<P: AsRef<Path>>(name: P) -> File {
-    OpenOptions::new()
-        .create(true)
-        .write(true)
-        .append(true)
-        .open(name)
-        .expect("Can't open log file")
-}
-
-fn log_name_from(datetime: &DateTime<Local>) -> String {
-    format!("{:04}-{:02}-{:02}.log", datetime.year(), datetime.month(), datetime.day())
 }
 
 fn parse_args() -> Config {
